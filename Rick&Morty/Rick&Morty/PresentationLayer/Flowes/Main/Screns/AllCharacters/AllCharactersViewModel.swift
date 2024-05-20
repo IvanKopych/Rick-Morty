@@ -19,6 +19,7 @@ final class AllCharactersViewModel: ObservableObject {
     
     @Published var characters: [CharacterModel] = []
     var page = 1
+    var nextPage: String?
     
     @Dependency(NetworkService.self) var networkService
     
@@ -35,10 +36,8 @@ final class AllCharactersViewModel: ObservableObject {
             let data = try await networkService.getAllCharacters(page: page)
             await MainActor.run {
                 self.characters.append(contentsOf: data.results)
-                
-                if data.info.next != nil {
-                    self.page += 1
-                }
+                self.nextPage = data.info.next
+                self.page += 1
             }
             
         } catch {

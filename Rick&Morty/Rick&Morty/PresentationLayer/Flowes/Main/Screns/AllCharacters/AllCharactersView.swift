@@ -18,9 +18,11 @@ struct AllCharactersView: View {
                     CharacterItemView(model: charecter)
                         .padding()
                         .onAppear {
-                            if viewModel.characters.last?.id == charecter.id {
-                                Task {
-                                    await viewModel.fetchCharacters()
+                            if viewModel.nextPage != nil {
+                                if viewModel.characters.last?.id == charecter.id {
+                                    Task {
+                                        await viewModel.fetchCharacters()
+                                    }
                                 }
                             }
                         }
